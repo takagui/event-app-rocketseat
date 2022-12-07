@@ -32,7 +32,7 @@ export function Home() {
       [
         {
           text: 'Sim',
-          onPress: () => Alert.alert('Deletado!'),
+          onPress: () => setParticipants(prevState => prevState.filter(participant => participant !== name)),
         },
         {
           text: 'Não',
