@@ -1,9 +1,9 @@
+import { useState } from 'react';
 import { 
   Text, 
   TextInput, 
   View, 
   TouchableOpacity,
-  ScrollView,
   FlatList,
   Alert, 
 } from 'react-native';
@@ -12,59 +12,17 @@ import { Participant } from '../../components/Participant';
 
 import { styles } from './styles';
 
-interface IParticipant {
-  id: number;
-  name: string;
-}
-
 export function Home() {
-  const participants: IParticipant[] = [
-    {
-      id: 1,
-      name: 'Taka',
-    },
-    {
-      id: 2,
-      name: 'Naka',
-    },
-    {
-      id: 3,
-      name: 'Pan',
-    },
-    {
-      id: 5,
-      name: 'Nina',
-    },
-    {
-      id: 6,
-      name: 'Saori',
-    },
-    {
-      id: 7,
-      name: 'Bento',
-    },
-    {
-      id: 8,
-      name: 'Fulano',
-    },
-    {
-      id: 9,
-      name: 'Ciclano',
-    },
-    {
-      id: 10,
-      name: 'Abcd',
-    },
-    {
-      id: 11,
-      name: 'Abcde',
-    },
-  ];
+  const [participants, setParticipants] = useState<string[]>([]);
+  const [participantName, setParticipantName] = useState('');
 
   function handleParticipantAdd() {
-    if (participants.find(participant => participant.name.toLowerCase() === 'taka')) {
+    if (participants.includes(participantName)) {
       return Alert.alert('Participante já existe', 'Já existe um participante com esse nome na lista.')
     }
+
+    setParticipants((prevState) => [...prevState, participantName]);
+    setParticipantName('');
   }
 
   function handleParticipantRemove(name: string) {
@@ -98,6 +56,8 @@ export function Home() {
           style={styles.input}
           placeholder="Nome do participante"
           placeholderTextColor="#6B6B6B"
+          value={participantName}
+          onChangeText={setParticipantName}
         />
 
         <TouchableOpacity 
@@ -113,13 +73,13 @@ export function Home() {
 
       <FlatList 
         data={participants}
-        keyExtractor={item => item.name}
+        keyExtractor={item => item}
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => (
           <Participant
-            key={item.id} 
-            name={item.name} 
-            onRemove={() => handleParticipantRemove(item.name)} 
+            key={item} 
+            name={item} 
+            onRemove={() => handleParticipantRemove(item)} 
           />
         )}
         ListEmptyComponent={() => (
